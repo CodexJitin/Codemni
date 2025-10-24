@@ -9,7 +9,7 @@ Notes:
 - Supports Claude 3 models (opus, sonnet, haiku) and legacy models.
 
 Example usage:
-    >>> from codemni_LLM.Anthropic_llm import anthropic_llm, AnthropicLLMError
+    >>> from Codemni.llm import anthropic_llm, AnthropicLLMError
     >>> 
     >>> try:
     ...     response = anthropic_llm(

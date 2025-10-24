@@ -10,7 +10,7 @@ Notes:
 - Supports all Ollama models (llama2, mistral, codellama, etc.).
 
 Example usage:
-    >>> from codemni_LLM.Ollama_llm import ollama_llm, OllamaLLMError
+    >>> from Codemni.llm import ollama_llm, OllamaLLMError
     >>> 
     >>> try:
     ...     response = ollama_llm(

@@ -11,7 +11,7 @@ Notes:
   objects used across minor client versions.
 
 Example usage:
-    >>> from codemni_LLM.Google_llm import google_llm, GoogleLLMError
+    >>> from Codemni.llm import google_llm, GoogleLLMError
     >>> 
     >>> try:
     ...     response = google_llm(

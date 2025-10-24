@@ -9,7 +9,7 @@ Notes:
 - Supports Groq's fast inference models (llama3, mixtral, gemma, etc.).
 
 Example usage:
-    >>> from codemni_LLM.Groq_llm import groq_llm, GroqLLMError
+    >>> from Codemni.llm import groq_llm, GroqLLMError
     >>> 
     >>> try:
     ...     response = groq_llm(

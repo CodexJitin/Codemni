@@ -9,7 +9,7 @@ Notes:
 - Handles both chat models (gpt-4, gpt-3.5-turbo) and legacy completion models.
 
 Example usage:
-    >>> from codemni_LLM.OpenAI_llm import openai_llm, OpenAILLMError
+    >>> from Codemni.llm import openai_llm, OpenAILLMError
     >>> 
     >>> try:
     ...     response = openai_llm(
