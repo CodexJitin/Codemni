@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="./assets/codemni-logo.png" alt="Codemni Logo" width="400"/>
+<img src="./assets/codemni-logo.jpg" alt="Codemni Logo" width="400"/>
 
 **🚀 Production-Ready Python Toolkit for AI Development**
 
