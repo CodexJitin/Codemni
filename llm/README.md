@@ -1,8 +1,10 @@
-# codemni_LLM
+# Codemni LLM Module
 
 **Production-ready LLM wrappers with robust error handling, retries, and minimal dependencies.**
 
-A unified Python package that provides simple, consistent interfaces to multiple Large Language Model (LLM) providers. Each wrapper is designed for production use with built-in retry logic, timeout handling, and clear exception hierarchies.
+A unified Python module that provides simple, consistent interfaces to multiple Large Language Model (LLM) providers. Each wrapper is designed for production use with built-in retry logic, timeout handling, and clear exception hierarchies.
+
+This module is part of the [Codemni](https://github.com/CodexJitin/Codemni) package.
 
 ## ✨ Features
 
@@ -26,9 +28,20 @@ A unified Python package that provides simple, consistent interfaces to multiple
 
 ## 📦 Installation
 
-### Install the package
+### Install from GitHub
+
 ```bash
+# Clone the repository
+git clone https://github.com/CodexJitin/Codemni.git
+cd Codemni
+
+# Install the Codemni package
 pip install -e .
+```
+
+Or install directly from GitHub:
+```bash
+pip install git+https://github.com/CodexJitin/Codemni.git
 ```
 
 ### Install optional dependencies (based on your needs)
@@ -57,10 +70,12 @@ pip install openai anthropic groq google-generativeai ollama
 
 ## 🎯 Quick Start
 
+Import using: `from Codemni.llm import ...`
+
 ### Google Gemini
 
 ```python
-from codemni_LLM import google_llm, GoogleLLMError
+from Codemni.llm import google_llm, GoogleLLMError
 
 try:
     response = google_llm(
@@ -76,7 +91,7 @@ except GoogleLLMError as e:
 ### OpenAI
 
 ```python
-from codemni_LLM import openai_llm, OpenAILLMError
+from Codemni.llm import openai_llm, OpenAILLMError
 
 try:
     response = openai_llm(
@@ -239,13 +254,14 @@ See `examples.py` for complete working examples of all providers.
 
 Run examples:
 ```bash
-python -m codemni_LLM.examples
+cd Codemni
+python -m llm.examples
 ```
 
 ## 🏗️ Project Structure
 
 ```
-codemni_LLM/
+Codemni/llm/
 ├── __init__.py           # Package initialization and exports
 ├── Google_llm.py         # Google Gemini wrapper
 ├── OpenAI_llm.py         # OpenAI GPT wrapper
@@ -279,7 +295,13 @@ See the main project LICENSE file for details.
 
 ## 👤 Author
 
-**codexJitin**
+**CodexJitin**
+
+## 📦 Repository
+
+**GitHub**: [CodexJitin/Codemni](https://github.com/CodexJitin/Codemni)
+
+This LLM module is part of the Codemni repository and is located in the `llm` subdirectory.
 
 ## 🔖 Version
 

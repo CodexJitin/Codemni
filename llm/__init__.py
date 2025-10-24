@@ -1,5 +1,5 @@
 """
-Initialize codemni_LLM package
+Initialize Codemni LLM package
 
 Production-ready LLM wrappers with robust error handling, retries, and no logging.
 Supports: Google Gemini, OpenAI, Anthropic Claude, Groq, and Ollama.
@@ -46,7 +46,7 @@ from .Ollama_llm import (
 )
 
 __version__ = "1.0.0"
-__author__ = "codexJitin"
+__author__ = "CodexJitin"
 __all__ = [
     # Google Gemini
     "google_llm",
