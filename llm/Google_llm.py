@@ -322,4 +322,92 @@ def google_llm(
     raise GoogleLLMAPIError("Google LLM request failed") from last_exc
 
 
-__all__ = ["google_llm", "GoogleLLMError", "GoogleLLMAPIError"]
+class GoogleLLM:
+    """
+    Class-based wrapper for Google Gemini LLM with generate_response method.
+    
+    This class wraps the google_llm function to provide a stateful interface
+    suitable for use with agents and other systems that expect an object
+    with a generate_response(prompt) method.
+    
+    Example:
+        >>> llm = GoogleLLM(model="gemini-1.5-pro", api_key="your-key")
+        >>> response = llm.generate_response("What is Python?")
+        >>> print(response)
+    """
+    
+    def __init__(
+        self,
+        model: str,
+        api_key: Optional[str] = None,
+        *,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        max_tokens: Optional[int] = None,
+        max_retries: int = 3,
+        timeout: Optional[float] = 30.0,
+        backoff_factor: float = 0.5,
+    ):
+        """
+        Initialize Google Gemini LLM wrapper.
+        
+        Args:
+            model: Model identifier (e.g. "gemini-1.5-pro", "gemini-pro")
+            api_key: API key (optional if GOOGLE_API_KEY env var is set)
+            temperature: Controls randomness (0.0-2.0)
+            top_p: Nucleus sampling threshold (0.0-1.0)
+            top_k: Top-k sampling
+            max_tokens: Maximum tokens to generate
+            max_retries: Number of retry attempts on failure
+            timeout: Request timeout in seconds
+            backoff_factor: Exponential backoff factor for retries
+        """
+        self.model = model
+        self.api_key = api_key
+        self.temperature = temperature
+        self.top_p = top_p
+        self.top_k = top_k
+        self.max_tokens = max_tokens
+        self.max_retries = max_retries
+        self.timeout = timeout
+        self.backoff_factor = backoff_factor
+    
+    def generate_response(self, prompt: str) -> str:
+        """
+        Generate a response from the Google Gemini model.
+        
+        Args:
+            prompt: The input prompt text
+            
+        Returns:
+            Generated response text
+            
+        Raises:
+            ValueError: If prompt is invalid
+            GoogleLLMImportError: If Google client not available
+            GoogleLLMAPIError: If API request fails
+            GoogleLLMResponseError: If response is invalid
+        """
+        return google_llm(
+            prompt=prompt,
+            model=self.model,
+            api_key=self.api_key,
+            temperature=self.temperature,
+            top_p=self.top_p,
+            top_k=self.top_k,
+            max_tokens=self.max_tokens,
+            max_retries=self.max_retries,
+            timeout=self.timeout,
+            backoff_factor=self.backoff_factor,
+        )
+
+
+__all__ = [
+    "google_llm",
+    "GoogleLLM",
+    "GoogleLLMError",
+    "GoogleLLMAPIError",
+    "GoogleLLMImportError",
+    "GoogleLLMResponseError",
+]

@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Codemni"
+version = "1.1.0"
+description = "Production-Ready Python Toolkit for AI Development - LLM wrappers, AI agents, and conversation memory"
+readme = "README.md"
+authors = [
+    {name = "CodexJitin"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["ai", "llm", "agent", "openai", "anthropic", "google", "gemini", "groq", "ollama", "memory", "tool-calling"]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+google = ["google-generativeai>=0.3.0"]
+anthropic = ["anthropic>=0.25.0"]
+groq = ["groq>=0.4.0"]
+ollama = ["ollama>=0.1.0"]
+all = [
+    "openai>=1.0.0",
+    "google-generativeai>=0.3.0",
+    "anthropic>=0.25.0",
+    "groq>=0.4.0",
+    "ollama>=0.1.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CodexJitin/Codemni"
+Documentation = "https://github.com/CodexJitin/Codemni#readme"
+Repository = "https://github.com/CodexJitin/Codemni"
+"Bug Tracker" = "https://github.com/CodexJitin/Codemni/issues"
+
+[tool.setuptools]
+py-modules = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["llm", "memory", "TOOL_CALLING_AGENT", "core"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "README.md"]

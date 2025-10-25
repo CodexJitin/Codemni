@@ -160,4 +160,80 @@ def ollama_llm(
     raise OllamaLLMAPIError("Ollama LLM request failed") from last_exc
 
 
-__all__ = ["ollama_llm", "OllamaLLMError", "OllamaLLMAPIError"]
+class OllamaLLM:
+    """
+    Class-based wrapper for Ollama LLM with generate_response method.
+    
+    This class wraps the ollama_llm function to provide a stateful interface
+    suitable for use with agents and other systems that expect an object
+    with a generate_response(prompt) method.
+    
+    Example:
+        >>> llm = OllamaLLM(model="llama2", base_url="http://localhost:11434")
+        >>> response = llm.generate_response("What is Python?")
+        >>> print(response)
+    """
+    
+    def __init__(
+        self,
+        model: str,
+        base_url: Optional[str] = None,
+        *,
+        max_retries: int = 3,
+        timeout: Optional[float] = 60.0,
+        backoff_factor: float = 0.5,
+        temperature: Optional[float] = None,
+    ):
+        """
+        Initialize Ollama LLM wrapper.
+        
+        Args:
+            model: Model identifier (e.g. "llama2", "mistral", "codellama")
+            base_url: Ollama server URL (optional, defaults to http://localhost:11434)
+            max_retries: Number of retry attempts on failure
+            timeout: Request timeout in seconds
+            backoff_factor: Exponential backoff factor for retries
+            temperature: Sampling temperature (0.0 to 2.0)
+        """
+        self.model = model
+        self.base_url = base_url
+        self.max_retries = max_retries
+        self.timeout = timeout
+        self.backoff_factor = backoff_factor
+        self.temperature = temperature
+    
+    def generate_response(self, prompt: str) -> str:
+        """
+        Generate a response from the Ollama model.
+        
+        Args:
+            prompt: The input prompt text
+            
+        Returns:
+            Generated response text
+            
+        Raises:
+            ValueError: If prompt is invalid
+            OllamaLLMImportError: If Ollama client not available
+            OllamaLLMAPIError: If API request fails
+            OllamaLLMResponseError: If response is invalid
+        """
+        return ollama_llm(
+            prompt=prompt,
+            model=self.model,
+            base_url=self.base_url,
+            max_retries=self.max_retries,
+            timeout=self.timeout,
+            backoff_factor=self.backoff_factor,
+            temperature=self.temperature,
+        )
+
+
+__all__ = [
+    "ollama_llm",
+    "OllamaLLM",
+    "OllamaLLMError",
+    "OllamaLLMAPIError",
+    "OllamaLLMImportError",
+    "OllamaLLMResponseError",
+]

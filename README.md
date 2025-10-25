@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-CodexJitin%2FCodemni-181717?logo=github)](https://github.com/CodexJitin/Codemni)
 
-*A modular collection of production-ready tools and utilities for modern AI-powered Python applications*
+*A modular collection of production-ready tools for building AI agents, managing LLM interactions, and maintaining conversation context*
 
 [Features](#-features) • [Installation](#-installation) • [Modules](#-modules) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
 
@@ -20,11 +20,12 @@
 
 ## 📖 About
 
-**Codemni** is a comprehensive Python toolkit designed to accelerate AI development with robust, production-ready components. Built with a focus on:
+**Codemni** is a comprehensive Python toolkit designed to accelerate AI development with robust, production-ready components. From LLM integrations to intelligent agents with memory, Codemni provides everything you need to build sophisticated AI applications. Built with a focus on:
 
 - ✨ **Production-Ready**: Battle-tested with built-in error handling, retries, and timeouts
 - 🎯 **Modular Design**: Use only what you need, keep dependencies minimal
 - 🔧 **Developer-Friendly**: Consistent APIs, clear documentation, and intuitive interfaces
+- 🤖 **AI-First**: Purpose-built for LLM applications and AI agent workflows
 - 🚀 **Performance**: Optimized for speed and reliability
 - 🛡️ **Robust**: Comprehensive exception handling and defensive coding
 
@@ -32,12 +33,48 @@
 
 ## 🧩 Modules
 
+### 🤖 [ToolCalling Agent](./TOOL_CALLING_AGENT/) - AI Agent Framework
+
+Powerful and flexible AI agent framework that enables LLMs to intelligently select and execute tools.
+
+**Key Features:**
+- 🔧 Dynamic tool execution based on LLM decisions
+- 💾 Optional conversation memory (4 different strategies)
+- 🎨 Custom agent personality/role support
+- 📊 Verbose mode for debugging
+- 🔌 Multi-LLM support (OpenAI, Google Gemini, Anthropic, Groq, Ollama)
+- ⚠️ Designed for standard models (reasoning models like o1, o3 not supported)
+
+**[📚 Full Agent Documentation →](./TOOL_CALLING_AGENT/README.md)**
+
+---
+
+### 💾 [Memory Module](./memory/) - Conversation History Management
+
+Flexible conversation memory system for maintaining context in multi-turn interactions.
+
+**Available Memory Types:**
+- 📝 **ConversationalBufferMemory** - Store all messages
+- 🪟 **ConversationalWindowMemory** - Keep last N exchanges
+- 🎫 **ConversationalTokenBufferMemory** - Limit by token count
+- 📋 **ConversationalSummaryMemory** - Summarize old conversations
+
+**Key Features:**
+- Common API across all memory types
+- Easy serialization (save/load)
+- Lightweight and efficient
+- Integrates seamlessly with ToolCalling Agent
+
+**[📚 Full Memory Documentation →](./memory/README.md)**
+
+---
+
 ### 📡 [LLM Module](./llm/) - Large Language Model Wrappers
 
 Production-ready wrappers for popular LLM providers with unified interface.
 
 **Supported Providers:**
-- 🔷 Google Gemini (`gemini-pro`, `gemini-1.5-pro`)
+- 🔷 Google Gemini (`gemini-pro`, `gemini-2.0-flash-exp`)
 - 🟢 OpenAI (`gpt-4`, `gpt-3.5-turbo`, `gpt-4-turbo`)
 - 🟣 Anthropic Claude (`claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`)
 - ⚡ Groq (`llama3-70b`, `mixtral-8x7b`)
@@ -47,6 +84,7 @@ Production-ready wrappers for popular LLM providers with unified interface.
 - Automatic retries with exponential backoff
 - Configurable timeouts
 - Consistent API across all providers
+- Both function and class-based interfaces
 - Silent operation (no logging)
 - Minimal dependencies
 
@@ -56,40 +94,93 @@ Production-ready wrappers for popular LLM providers with unified interface.
 
 ## 📦 Installation
 
-### Quick Install
+### Install from PyPI (Recommended)
+
+```bash
+# Install the base package
+pip install Codemni
+
+# Install with specific LLM providers
+pip install Codemni[openai]        # OpenAI support
+pip install Codemni[anthropic]     # Anthropic Claude support
+pip install Codemni[groq]          # Groq support
+pip install Codemni[google]        # Google Gemini support
+pip install Codemni[ollama]        # Ollama (local) support
+
+# Install with all LLM providers
+pip install Codemni[all]
+```
+
+### Install from Source
 
 ```bash
 # Clone the repository
 git clone https://github.com/CodexJitin/Codemni.git
 cd Codemni
 
-# Install the package
+# Install in development mode
 pip install -e .
-```
 
-### Direct from GitHub
-
-```bash
-pip install git+https://github.com/CodexJitin/Codemni.git
-```
-
-### Install with Optional Dependencies
-
-```bash
-# Install with specific LLM providers
-pip install -e .[openai]        # OpenAI support
-pip install -e .[anthropic]     # Anthropic Claude support
-pip install -e .[groq]          # Groq support
-pip install -e .[google]        # Google Gemini support
-pip install -e .[ollama]        # Ollama (local) support
-
-# Install with all LLM providers
+# Or install with all dependencies
 pip install -e .[all]
 ```
 
 ---
 
 ## 🚀 Quick Start
+
+### Installation
+
+```bash
+pip install Codemni[all]  # Install with all LLM providers
+```
+
+### ToolCalling Agent - Basic Usage
+
+```python
+from Codemni.TOOL_CALLING_AGENT.agent import Create_ToolCalling_Agent
+from Codemni.llm.Google_llm import GoogleLLM
+
+# Initialize LLM
+llm = GoogleLLM(
+    model="gemini-2.0-flash-exp",
+    api_key="YOUR_API_KEY"  # or set GOOGLE_API_KEY env var
+)
+
+# Create agent
+agent = Create_ToolCalling_Agent(llm=llm, verbose=True)
+
+# Define a tool
+def calculator(expression):
+    return str(eval(expression))
+
+# Add tool to agent
+agent.add_tool("calculator", "Evaluate mathematical expressions", calculator)
+
+# Use the agent
+response = agent.invoke("What is 125 * 48?")
+print(response)  # Agent will use the calculator tool
+```
+
+### ToolCalling Agent with Memory
+
+```python
+from Codemni.TOOL_CALLING_AGENT.agent import Create_ToolCalling_Agent
+from Codemni.llm.Google_llm import GoogleLLM
+from Codemni.memory.conversational_buffer_memory import ConversationalBufferMemory
+
+# Initialize LLM and memory
+llm = GoogleLLM(model="gemini-2.0-flash-exp", api_key="YOUR_API_KEY")
+memory = ConversationalBufferMemory()
+
+# Create agent with memory
+agent = Create_ToolCalling_Agent(llm=llm, memory=memory, verbose=True)
+agent.add_tool("calculator", "Evaluate math", calculator)
+
+# Multi-turn conversation with context
+response1 = agent.invoke("Calculate 50 + 25")  # Returns: 75
+response2 = agent.invoke("Now multiply that by 2")  # Returns: 150 (remembers 75!)
+```
 
 ### LLM Module - Basic Usage
 
@@ -185,10 +276,22 @@ response = google_llm(prompt="Hello", model="gemini-pro")
 Codemni/
 ├── 📄 README.md              # This file - Main documentation
 ├── 📄 LICENSE                # License information
-├── 📄 setup.py               # Package configuration
 ├── 📄 requirements.txt       # Base dependencies
 ├── 📄 __init__.py            # Package initialization
-├── 📄 example_usage.py       # Quick examples
+│
+├── � TOOL_CALLING_AGENT/    # AI Agent Module
+│   ├── __init__.py
+│   ├── README.md             # Agent documentation
+│   ├── agent.py              # Main agent implementation
+│   └── prompt.py             # Prompt templates
+│
+├── � memory/                # Memory Module
+│   ├── __init__.py
+│   ├── README.md             # Memory documentation
+│   ├── conversational_buffer_memory.py
+│   ├── conversational_window_memory.py
+│   ├── conversational_token_buffer_memory.py
+│   └── conversational_summary_memory.py
 │
 ├── 📁 llm/                   # LLM Module
 │   ├── __init__.py
@@ -197,11 +300,13 @@ Codemni/
 │   ├── OpenAI_llm.py         # OpenAI wrapper
 │   ├── Anthropic_llm.py      # Anthropic wrapper
 │   ├── Groq_llm.py           # Groq wrapper
-│   ├── Ollama_llm.py         # Ollama wrapper
-│   └── examples.py           # Usage examples
+│   └── Ollama_llm.py         # Ollama wrapper
 │
-└── 📁 [Future Modules]       # Coming soon...
-    └── ...
+├── 📁 core/                  # Core utilities
+│   └── adapter.py            # Tool execution adapter
+│
+└── 📁 assets/                # Assets and media
+    └── codemni-logo.jpg
 ```
 
 ---
@@ -210,20 +315,50 @@ Codemni/
 
 ### Module Documentation
 
+- **[ToolCalling Agent](./TOOL_CALLING_AGENT/README.md)** - AI agent framework guide
+  - Complete API reference for all methods
+  - Memory integration guide
+  - Tool definition best practices
+  - Custom prompt guidelines
+  - Troubleshooting and examples
+  
+- **[Memory Module](./memory/README.md)** - Conversation memory guide
+  - Memory type comparison
+  - Usage examples for each type
+  - Serialization and persistence
+  - Integration with agents
+
 - **[LLM Module](./llm/README.md)** - Comprehensive guide to LLM wrappers
   - API reference for all providers
   - Advanced usage examples
   - Exception handling guide
   - Provider-specific notes
 
-### Examples
-
-- `example_usage.py` - Quick start examples for all modules
-- `llm/examples.py` - Detailed LLM provider examples
-
 ---
 
 ## ✨ Features by Module
+
+### ToolCalling Agent
+
+| Feature | Description |
+|---------|-------------|
+| 🤖 **Multi-LLM Support** | Works with OpenAI, Google Gemini, Anthropic, Groq, Ollama |
+| 🔧 **Dynamic Tools** | Automatically selects and executes appropriate tools |
+| 💾 **Optional Memory** | 4 memory strategies for conversation context |
+| 🎨 **Custom Prompts** | Customize agent personality and role |
+| 📊 **Verbose Mode** | Detailed logging for debugging |
+| ⚠️ **Standard Models** | Optimized for instruction-following models (not reasoning models) |
+
+### Memory Module
+
+| Feature | Description |
+|---------|-------------|
+| 📝 **Buffer Memory** | Store all conversation messages |
+| 🪟 **Window Memory** | Keep only recent N exchanges |
+| 🎫 **Token Buffer** | Limit memory by token count |
+| 📋 **Summary Memory** | Summarize old conversations |
+| 💾 **Serialization** | Save/load conversation history |
+| 🔌 **Easy Integration** | Works seamlessly with agents |
 
 ### LLM Module
 
@@ -236,6 +371,7 @@ Codemni/
 | 📦 **Minimal Deps** | Install only what you need |
 | 🎯 **Unified API** | Same interface across all providers |
 | ✅ **Validation** | Input validation and defensive coding |
+| 🔧 **Dual Interface** | Both function and class-based APIs |
 
 ---
 
@@ -288,9 +424,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔖 Version
 
-**Current Version: 1.0.0**
+**Current Version: 1.1.0**
 
 ### Changelog
+
+#### v1.1.0 (2025-10-25)
+- 🎉 Added ToolCalling Agent module
+- 💾 Added Memory module with 4 memory strategies
+- 🔧 LLM module now supports both function and class-based interfaces
+- 📚 Comprehensive documentation for all modules
+- ⚠️ Added warnings about reasoning model compatibility
 
 #### v1.0.0 (2025-10-24)
 - 🎉 Initial release

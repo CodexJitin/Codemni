@@ -4,7 +4,24 @@
 
 A unified Python module that provides simple, consistent interfaces to multiple Large Language Model (LLM) providers. Each wrapper is designed for production use with built-in retry logic, timeout handling, and clear exception hierarchies.
 
-This module is part of the [Codemni](https://github.com/CodexJitin/Codemni) package.
+**NEW**: Now includes **class-based wrappers** alongside functions for stateful usage with agents!
+
+## Installation
+
+```bash
+# Install from PyPI
+pip install Codemni
+
+# Install with specific providers
+pip install Codemni[openai]
+pip install Codemni[google]
+pip install Codemni[anthropic]
+pip install Codemni[groq]
+pip install Codemni[ollama]
+
+# Install with all providers
+pip install Codemni[all]
+```
 
 ## ✨ Features
 
@@ -15,16 +32,44 @@ This module is part of the [Codemni](https://github.com/CodexJitin/Codemni) pack
 - 📦 **Minimal Dependencies**: Only install what you need
 - 🎯 **Consistent API**: Same function signature across all providers
 - 🧪 **Production-Ready**: Input validation and defensive coding practices
+- ⭐ **Two Interfaces**: Functions for one-off calls, Classes for stateful usage
 
 ## 🚀 Supported Providers
 
-| Provider | Function | Models Supported |
-|----------|----------|-----------------|
-| **Google Gemini** | `google_llm()` | gemini-pro, gemini-1.5-pro, etc. |
-| **OpenAI** | `openai_llm()` | gpt-4, gpt-3.5-turbo, etc. |
-| **Anthropic Claude** | `anthropic_llm()` | claude-3-opus, claude-3-sonnet, claude-3-haiku |
-| **Groq** | `groq_llm()` | llama3-70b-8192, mixtral-8x7b-32768, etc. |
-| **Ollama** | `ollama_llm()` | llama2, mistral, codellama (local) |
+| Provider | Function | Class | Models Supported |
+|----------|----------|-------|-----------------|
+| **Google Gemini** | `google_llm()` | `GoogleLLM` | gemini-pro, gemini-2.0-flash-exp, etc. |
+| **OpenAI** | `openai_llm()` | `OpenAILLM` | gpt-4, gpt-3.5-turbo, etc. |
+| **Anthropic Claude** | `anthropic_llm()` | `AnthropicLLM` | claude-3-opus, claude-3-sonnet, claude-3-haiku |
+| **Groq** | `groq_llm()` | `GroqLLM` | llama3-70b-8192, mixtral-8x7b-32768, etc. |
+| **Ollama** | `ollama_llm()` | `OllamaLLM` | llama2, mistral, codellama (local) |
+
+## 📚 Two Ways to Use
+
+### Option 1: Function-Based (Original)
+Perfect for one-off calls where you pass all parameters each time:
+
+```python
+from Codemni.llm import openai_llm
+
+response = openai_llm(
+    prompt="What is Python?",
+    model="gpt-4",
+    api_key="your-api-key"
+)
+```
+
+### Option 2: Class-Based (NEW!)
+Perfect for agents and repeated calls with the same configuration:
+
+```python
+from Codemni.llm import OpenAILLM
+
+llm = OpenAILLM(model="gpt-4", api_key="your-api-key")
+
+response1 = llm.generate_response("What is Python?")
+response2 = llm.generate_response("What is JavaScript?")
+```
 
 ## 📦 Installation
 
@@ -70,9 +115,11 @@ pip install openai anthropic groq google-generativeai ollama
 
 ## 🎯 Quick Start
 
+### Function-Based Examples
+
 Import using: `from Codemni.llm import ...`
 
-### Google Gemini
+#### Google Gemini
 
 ```python
 from Codemni.llm import google_llm, GoogleLLMError
@@ -88,7 +135,7 @@ except GoogleLLMError as e:
     print(f"Error: {e}")
 ```
 
-### OpenAI
+#### OpenAI
 
 ```python
 from Codemni.llm import openai_llm, OpenAILLMError
@@ -106,7 +153,75 @@ except OpenAILLMError as e:
     print(f"Error: {e}")
 ```
 
-### Anthropic Claude
+### Class-Based Examples (NEW!)
+
+#### OpenAI Class
+
+```python
+from Codemni.llm import OpenAILLM
+
+llm = OpenAILLM(
+    model="gpt-4",
+    api_key="your-api-key",  # or set OPENAI_API_KEY env var
+    temperature=0.7
+)
+
+response = llm.generate_response("What is artificial intelligence?")
+print(response)
+```
+
+#### Google Gemini Class
+
+```python
+from Codemni.llm import GoogleLLM
+
+llm = GoogleLLM(
+    model="gemini-1.5-pro",
+    api_key="your-api-key",  # or set GOOGLE_API_KEY env var
+    temperature=0.9
+)
+
+response = llm.generate_response("Write a creative story")
+print(response)
+```
+
+#### Anthropic Claude Class
+
+```python
+from Codemni.llm import AnthropicLLM
+
+llm = AnthropicLLM(
+    model="claude-3-sonnet-20240229",
+    api_key="your-api-key",  # or set ANTHROPIC_API_KEY env var
+    max_tokens=4096
+)
+
+response = llm.generate_response("Explain quantum computing")
+print(response)
+```
+
+#### Use with Agents
+
+Classes are perfect for use with agents that expect a `generate_response()` method:
+
+```python
+from Codemni.llm import OpenAILLM
+from TOOL_CALLING_AGENT.agent import Create_ToolCalling_Agent
+
+# Initialize LLM
+llm = OpenAILLM(model="gpt-4", api_key="your-key")
+
+# Pass to agent
+agent = Create_ToolCalling_Agent(llm=llm, verbose=True)
+
+# Add tools
+agent.add_tool("calculator", "Calculate expressions", lambda x: eval(x))
+
+# Use agent
+result = agent.invoke("What is 100 + 200?")
+```
+
+### Anthropic Claude (Function)
 
 ```python
 from codemni_LLM import anthropic_llm, AnthropicLLMError

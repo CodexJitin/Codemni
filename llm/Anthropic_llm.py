@@ -163,4 +163,84 @@ def anthropic_llm(
     raise AnthropicLLMAPIError("Anthropic LLM request failed") from last_exc
 
 
-__all__ = ["anthropic_llm", "AnthropicLLMError", "AnthropicLLMAPIError"]
+class AnthropicLLM:
+    """
+    Class-based wrapper for Anthropic Claude LLM with generate_response method.
+    
+    This class wraps the anthropic_llm function to provide a stateful interface
+    suitable for use with agents and other systems that expect an object
+    with a generate_response(prompt) method.
+    
+    Example:
+        >>> llm = AnthropicLLM(model="claude-3-sonnet-20240229", api_key="your-key")
+        >>> response = llm.generate_response("What is Python?")
+        >>> print(response)
+    """
+    
+    def __init__(
+        self,
+        model: str,
+        api_key: Optional[str] = None,
+        *,
+        max_retries: int = 3,
+        timeout: Optional[float] = 30.0,
+        backoff_factor: float = 0.5,
+        temperature: Optional[float] = None,
+        max_tokens: int = 4096,
+    ):
+        """
+        Initialize Anthropic Claude LLM wrapper.
+        
+        Args:
+            model: Model identifier (e.g. "claude-3-opus-20240229", "claude-3-sonnet-20240229")
+            api_key: API key (optional if ANTHROPIC_API_KEY env var is set)
+            max_retries: Number of retry attempts on failure
+            timeout: Request timeout in seconds
+            backoff_factor: Exponential backoff factor for retries
+            temperature: Sampling temperature (0.0 to 1.0)
+            max_tokens: Maximum tokens in response (required by Anthropic)
+        """
+        self.model = model
+        self.api_key = api_key
+        self.max_retries = max_retries
+        self.timeout = timeout
+        self.backoff_factor = backoff_factor
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+    
+    def generate_response(self, prompt: str) -> str:
+        """
+        Generate a response from the Anthropic Claude model.
+        
+        Args:
+            prompt: The input prompt text
+            
+        Returns:
+            Generated response text
+            
+        Raises:
+            ValueError: If prompt is invalid
+            AnthropicLLMImportError: If Anthropic client not available
+            AnthropicLLMAPIError: If API request fails
+            AnthropicLLMResponseError: If response is invalid
+        """
+        return anthropic_llm(
+            prompt=prompt,
+            model=self.model,
+            api_key=self.api_key,
+            max_retries=self.max_retries,
+            timeout=self.timeout,
+            backoff_factor=self.backoff_factor,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+        )
+
+
+__all__ = [
+    "anthropic_llm",
+    "AnthropicLLM",
+    "AnthropicLLMError",
+    "AnthropicLLMAPIError",
+    "AnthropicLLMImportError",
+    "AnthropicLLMResponseError",
+]
