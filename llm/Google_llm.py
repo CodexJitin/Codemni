@@ -28,6 +28,21 @@ from typing import Optional, Any
 import os
 import time
 
+# Import the Google generativeai client at module level to reduce import overhead
+_GOOGLE_GENAI_AVAILABLE = False
+genai_module = None
+try:
+    try:
+        import google.generativeai as genai_module  # type: ignore
+        _GOOGLE_GENAI_AVAILABLE = True
+    except Exception:
+        # older or alternate packaging
+        from google import genai as genai_module  # type: ignore
+        _GOOGLE_GENAI_AVAILABLE = True
+except Exception:
+    _GOOGLE_GENAI_AVAILABLE = False
+    genai_module = None
+
 
 class GoogleLLMError(Exception):
     """Base exception for errors raised by this module."""
@@ -203,31 +218,31 @@ def google_llm(
             "No API key provided and environment variable GOOGLE_API_KEY is not set"
         )
 
-    # Import the client library defensively. Different environments may have
-    # slightly different import paths or client shapes.
-    genai = None
+    # Check if Google generativeai client is available
+    if not _GOOGLE_GENAI_AVAILABLE or genai_module is None:
+        raise GoogleLLMImportError(
+            "Failed to import or initialize google.generativeai client"
+        )
+
+    # Use the module-level imported genai
+    genai = genai_module
     client = None
+    
+    # Try to configure or create a client where appropriate. The package
+    # has a couple of helper patterns (configure + GenerativeModel) and a
+    # client wrapper with .models.generate_content. Be tolerant and keep
+    # the object shapes available for later.
     try:
-        try:
-            import google.generativeai as genai  # type: ignore
-        except Exception:
-            # older or alternate packaging
-            from google import genai  # type: ignore
+        # Prefer configure() if provided (no return value)
+        cfg = getattr(genai, "configure", None)
+        if callable(cfg):
+            cfg(api_key=api_key)
+    except Exception:
+        # Non-fatal: some wrappers don't require configure
+        pass
 
-        # Try to configure or create a client where appropriate. The package
-        # has a couple of helper patterns (configure + GenerativeModel) and a
-        # client wrapper with .models.generate_content. Be tolerant and keep
-        # the object shapes available for later.
-        try:
-            # Prefer configure() if provided (no return value)
-            cfg = getattr(genai, "configure", None)
-            if callable(cfg):
-                cfg(api_key=api_key)
-        except Exception:
-            # Non-fatal: some wrappers don't require configure
-            pass
-
-        # Instantiate client if a Client class exists
+    # Instantiate client if a Client class exists
+    try:
         ClientCls = getattr(genai, "Client", None)
         if callable(ClientCls):
             try:
@@ -235,11 +250,9 @@ def google_llm(
             except TypeError:
                 # Some Client constructors use different signatures
                 client = ClientCls()
-
-    except Exception as exc:  # import or construction failure
-        raise GoogleLLMImportError(
-            "Failed to import or initialize google.generativeai client"
-        ) from exc
+    except Exception:
+        # Non-fatal: client may not be needed
+        pass
 
     last_exc: Optional[BaseException] = None
 

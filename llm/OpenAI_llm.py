@@ -26,6 +26,14 @@ from typing import Optional, Any
 import os
 import time
 
+# Import the OpenAI client at module level to reduce import overhead
+try:
+    from openai import OpenAI
+    _OPENAI_AVAILABLE = True
+except ImportError:
+    _OPENAI_AVAILABLE = False
+    OpenAI = None  # type: ignore
+
 
 class OpenAILLMError(Exception):
     """Base exception for errors raised by this module."""
@@ -94,13 +102,11 @@ def openai_llm(
             "No API key provided and environment variable OPENAI_API_KEY is not set"
         )
 
-    # Import the client library
-    try:
-        from openai import OpenAI
-    except ImportError as exc:
+    # Check if OpenAI client is available
+    if not _OPENAI_AVAILABLE or OpenAI is None:
         raise OpenAILLMImportError(
             "OpenAI package not installed. Install with: pip install openai"
-        ) from exc
+        )
 
     # Initialize client
     try:

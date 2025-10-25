@@ -26,6 +26,14 @@ from typing import Optional, Any
 import os
 import time
 
+# Import the Groq client at module level to reduce import overhead
+try:
+    from groq import Groq
+    _GROQ_AVAILABLE = True
+except ImportError:
+    _GROQ_AVAILABLE = False
+    Groq = None  # type: ignore
+
 
 class GroqLLMError(Exception):
     """Base exception for errors raised by this module."""
@@ -94,13 +102,11 @@ def groq_llm(
             "No API key provided and environment variable GROQ_API_KEY is not set"
         )
 
-    # Import the client library
-    try:
-        from groq import Groq
-    except ImportError as exc:
+    # Check if Groq client is available
+    if not _GROQ_AVAILABLE or Groq is None:
         raise GroqLLMImportError(
             "Groq package not installed. Install with: pip install groq"
-        ) from exc
+        )
 
     # Initialize client
     try:

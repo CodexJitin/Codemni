@@ -1,0 +1,17 @@
+# Codemni LLM Wrapper Dependencies
+# Python package requirements for the Codemni project
+
+# OpenAI API client
+openai
+
+# Anthropic Claude API client
+anthropic
+
+# Google Generative AI (Gemini) API client
+google-generativeai
+
+# Groq API client
+groq
+
+# Ollama local API client
+ollama

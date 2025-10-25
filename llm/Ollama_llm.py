@@ -27,6 +27,14 @@ from typing import Optional, Any
 import os
 import time
 
+# Import the Ollama client at module level to reduce import overhead
+try:
+    from ollama import Client
+    _OLLAMA_AVAILABLE = True
+except ImportError:
+    _OLLAMA_AVAILABLE = False
+    Client = None  # type: ignore
+
 
 class OllamaLLMError(Exception):
     """Base exception for errors raised by this module."""
@@ -88,13 +96,11 @@ def ollama_llm(
 
     base_url = base_url or os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
-    # Import the client library
-    try:
-        from ollama import Client
-    except ImportError as exc:
+    # Check if Ollama client is available
+    if not _OLLAMA_AVAILABLE or Client is None:
         raise OllamaLLMImportError(
             "Ollama package not installed. Install with: pip install ollama"
-        ) from exc
+        )
 
     # Initialize client
     try:

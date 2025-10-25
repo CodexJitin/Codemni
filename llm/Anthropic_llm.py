@@ -26,6 +26,14 @@ from typing import Optional, Any
 import os
 import time
 
+# Import the Anthropic client at module level to reduce import overhead
+try:
+    from anthropic import Anthropic
+    _ANTHROPIC_AVAILABLE = True
+except ImportError:
+    _ANTHROPIC_AVAILABLE = False
+    Anthropic = None  # type: ignore
+
 
 class AnthropicLLMError(Exception):
     """Base exception for errors raised by this module."""
@@ -94,13 +102,11 @@ def anthropic_llm(
             "No API key provided and environment variable ANTHROPIC_API_KEY is not set"
         )
 
-    # Import the client library
-    try:
-        from anthropic import Anthropic
-    except ImportError as exc:
+    # Check if Anthropic client is available
+    if not _ANTHROPIC_AVAILABLE or Anthropic is None:
         raise AnthropicLLMImportError(
             "Anthropic package not installed. Install with: pip install anthropic"
-        ) from exc
+        )
 
     # Initialize client
     try:
