@@ -6,13 +6,14 @@
 
 **🚀 The Complete AI Agent Framework for Python**
 
+[![PyPI version](https://img.shields.io/pypi/v/Codemni.svg)](https://pypi.org/project/Codemni/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](https://github.com/CodexJitin/Codemni/blob/main/LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-CodexJitin%2FCodemni-181717?logo=github)](https://github.com/CodexJitin/Codemni)
 
 *The most powerful framework for building autonomous AI agents - featuring intelligent tool execution, multi-LLM orchestration, and advanced conversational memory*
 
-[Features](#-features) • [Installation](#-installation) • [Modules](#-modules) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
+[Features](#-features-by-module) • [Installation](#-installation) • [Modules](#-modules) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
 
 </div>
 
@@ -40,7 +41,7 @@
 
 Build powerful AI agents with varying levels of reasoning capabilities - from fast production agents to deep reasoning systems.
 
-#### [TOOL_CALLING_AGENT](./TOOL_CALLING_AGENT/) - Basic Tool Execution Agent
+#### [TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/TOOL_CALLING_AGENT) - Basic Tool Execution Agent
 
 Simple and efficient AI agent for standard tool-calling tasks.
 
@@ -52,9 +53,9 @@ Simple and efficient AI agent for standard tool-calling tasks.
 - 🔌 Multi-LLM support (OpenAI, Google Gemini, Anthropic, Groq, Ollama)
 - ⚠️ Designed for standard models (reasoning models like o1, o3 not supported)
 
-**[📚 Full Documentation →](./TOOL_CALLING_AGENT/README.md)**
+**[📚 Full Documentation →](https://github.com/CodexJitin/Codemni/tree/main/TOOL_CALLING_AGENT)**
 
-#### [REASONING_TOOL_CALLING_AGENT](./REASONING_TOOL_CALLING_AGENT/) - Fast Reasoning Agent ⚡
+#### [REASONING_TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/REASONING_TOOL_CALLING_AGENT) - Fast Reasoning Agent ⚡
 
 **Class:** `Create_ToolCalling_Agent`
 
@@ -70,9 +71,9 @@ Production-ready agent with basic reasoning capabilities - perfect for speed and
 
 **Best For:** Production APIs, real-time systems, cost-sensitive applications
 
-**[📚 Full Documentation →](./REASONING_TOOL_CALLING_AGENT/README.md)**
+**[📚 Full Documentation →](https://github.com/CodexJitin/Codemni/tree/main/REASONING_TOOL_CALLING_AGENT)**
 
-#### [DEEP_REASONING_TOOL_CALLING_AGENT](./DEEP_REASONING_TOOL_CALLING_AGENT/) - Advanced Reasoning Agent 🧠
+#### [DEEP_REASONING_TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/DEEP_REASONING_TOOL_CALLING_AGENT) - Advanced Reasoning Agent 🧠
 
 **Class:** `Create_Deep_Reasoning_Tool_Calling_Agent`
 
@@ -88,7 +89,7 @@ Sophisticated agent with deep chain-of-thought reasoning, problem analysis, and 
 
 **Best For:** Complex problems, research, debugging, educational tools
 
-**[📚 Full Documentation →](./DEEP_REASONING_TOOL_CALLING_AGENT/README.md)**
+**[📚 Full Documentation →](https://github.com/CodexJitin/Codemni/tree/main/DEEP_REASONING_TOOL_CALLING_AGENT)**
 
 **Comparison:**
 
@@ -101,7 +102,7 @@ Sophisticated agent with deep chain-of-thought reasoning, problem analysis, and 
 
 ---
 
-### 💾 [Memory Module](./memory/) - Conversation History Management
+### 💾 [Memory Module](https://github.com/CodexJitin/Codemni/tree/main/memory) - Conversation History Management
 
 Flexible conversation memory system for maintaining context in multi-turn interactions.
 
@@ -117,11 +118,11 @@ Flexible conversation memory system for maintaining context in multi-turn intera
 - Lightweight and efficient
 - Integrates seamlessly with ToolCalling Agent
 
-**[📚 Full Memory Documentation →](./memory/README.md)**
+**[📚 Full Memory Documentation →](https://github.com/CodexJitin/Codemni/tree/main/memory)**
 
 ---
 
-### 📡 [LLM Module](./llm/) - Large Language Model Wrappers
+### 📡 [LLM Module](https://github.com/CodexJitin/Codemni/tree/main/llm) - Large Language Model Wrappers
 
 Production-ready wrappers for popular LLM providers with unified interface.
 
@@ -140,7 +141,7 @@ Production-ready wrappers for popular LLM providers with unified interface.
 - Silent operation (no logging)
 - Minimal dependencies
 
-**[📚 Full LLM Documentation →](./llm/README.md)**
+**[📚 Full LLM Documentation →](https://github.com/CodexJitin/Codemni/tree/main/llm)**
 
 ---
 
@@ -436,32 +437,32 @@ Codemni/
 
 ### Module Documentation
 
-- **[TOOL_CALLING_AGENT](./TOOL_CALLING_AGENT/README.md)** - Basic tool calling agent
+- **[TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/TOOL_CALLING_AGENT)** - Basic tool calling agent
   - Simple tool execution without reasoning display
   - Memory integration guide
   - Tool definition best practices
   
-- **[REASONING_TOOL_CALLING_AGENT](./REASONING_TOOL_CALLING_AGENT/README.md)** - Fast reasoning agent ⚡
+- **[REASONING_TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/REASONING_TOOL_CALLING_AGENT)** - Fast reasoning agent ⚡
   - Complete API reference
   - Basic reasoning with thinking display
   - Production-ready performance
   - Memory integration
   - Troubleshooting and examples
 
-- **[DEEP_REASONING_TOOL_CALLING_AGENT](./DEEP_REASONING_TOOL_CALLING_AGENT/README.md)** - Advanced reasoning agent 🧠
+- **[DEEP_REASONING_TOOL_CALLING_AGENT](https://github.com/CodexJitin/Codemni/tree/main/DEEP_REASONING_TOOL_CALLING_AGENT)** - Advanced reasoning agent 🧠
   - Deep chain-of-thought reasoning
   - Problem understanding and situation awareness
   - Self-reflection and confidence scoring
   - Error recovery strategies
   - Complex problem-solving examples
   
-- **[Memory Module](./memory/README.md)** - Conversation memory guide
+- **[Memory Module](https://github.com/CodexJitin/Codemni/tree/main/memory)** - Conversation memory guide
   - Memory type comparison
   - Usage examples for each type
   - Serialization and persistence
   - Integration with agents
 
-- **[LLM Module](./llm/README.md)** - Comprehensive guide to LLM wrappers
+- **[LLM Module](https://github.com/CodexJitin/Codemni/tree/main/llm)** - Comprehensive guide to LLM wrappers
   - API reference for all providers
   - Advanced usage examples
   - Exception handling guide
@@ -574,9 +575,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔖 Version
 
-**Current Version: 1.2.0**
+**Current Version: 1.2.1**
 
 ### Changelog
+
+#### v1.2.1 (2025-10-25)
+
+- 🔗 **Fixed**: All documentation links now use absolute GitHub URLs for PyPI compatibility
+- 📦 **Added**: PyPI version badge in README
+- ✅ **Verified**: All links work correctly on PyPI, GitHub, and locally
 
 #### v1.2.0 (2025-10-25)
 
