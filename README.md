@@ -2,15 +2,15 @@
 
 <div align="center">
 
-<img src="./assets/codemni-logo.jpg" alt="Codemni Logo" width="400"/>
+<img src="https://raw.githubusercontent.com/CodexJitin/Codemni/main/assets/codemni-logo.jpg" alt="Codemni Logo" width="400"/>
 
-**🚀 Production-Ready Python Toolkit for AI Development**
+**🚀 The Complete AI Agent Framework for Python**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](https://github.com/CodexJitin/Codemni/blob/main/LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-CodexJitin%2FCodemni-181717?logo=github)](https://github.com/CodexJitin/Codemni)
 
-*A modular collection of production-ready tools for building AI agents, managing LLM interactions, and maintaining conversation context*
+*The most powerful framework for building autonomous AI agents - featuring intelligent tool execution, multi-LLM orchestration, and advanced conversational memory*
 
 [Features](#-features) • [Installation](#-installation) • [Modules](#-modules) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
 
@@ -20,14 +20,17 @@
 
 ## 📖 About
 
-**Codemni** is a comprehensive Python toolkit designed to accelerate AI development with robust, production-ready components. From LLM integrations to intelligent agents with memory, Codemni provides everything you need to build sophisticated AI applications. Built with a focus on:
+**Codemni** is a powerful Python framework for building production-ready AI agents and LLM applications. Unlike simple wrappers, Codemni provides a complete ecosystem with intelligent tool-calling agents, multi-provider LLM integrations, and sophisticated memory systems. Whether you're building chatbots, automation systems, or complex AI workflows, Codemni gives you the foundation to create robust, scalable solutions.
 
-- ✨ **Production-Ready**: Battle-tested with built-in error handling, retries, and timeouts
-- 🎯 **Modular Design**: Use only what you need, keep dependencies minimal
-- 🔧 **Developer-Friendly**: Consistent APIs, clear documentation, and intuitive interfaces
-- 🤖 **AI-First**: Purpose-built for LLM applications and AI agent workflows
-- 🚀 **Performance**: Optimized for speed and reliability
-- 🛡️ **Robust**: Comprehensive exception handling and defensive coding
+**Why Choose Codemni?**
+
+- 🤖 **Complete Agent Framework**: Not just an LLM wrapper - build agents that can think, decide, and execute tools
+- ✨ **Production-Ready**: Battle-tested with built-in error handling, retries, and intelligent fallbacks
+- 🎯 **Multi-Provider Support**: Seamlessly switch between OpenAI, Google, Anthropic, Groq, and Ollama
+- 🧠 **Advanced Memory**: 4 memory strategies to maintain context and conversation history
+- 🔧 **Developer-Friendly**: Intuitive APIs, comprehensive documentation, and consistent interfaces
+- 🚀 **Performance-Optimized**: Designed for speed, efficiency, and reliability at scale
+- 🛡️ **Enterprise-Grade**: Robust error handling, logging, and production-ready code
 
 ---
 

@@ -17,9 +17,9 @@ Example:
 For detailed documentation, see: https://github.com/CodexJitin/Codemni
 """
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __author__ = "CodexJitin"
-__license__ = "MIT"
+__license__ = "Proprietary"
 
 # Note: Submodules are imported when accessed directly
 # e.g., from Codemni.llm import openai_llm

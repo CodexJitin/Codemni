@@ -4,17 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Codemni"
-version = "1.1.0"
+version = "1.1.1"
 description = "Production-Ready Python Toolkit for AI Development - LLM wrappers, AI agents, and conversation memory"
 readme = "README.md"
 authors = [
     {name = "CodexJitin"}
 ]
-license = {text = "MIT"}
+license = {text = "Proprietary"}
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",

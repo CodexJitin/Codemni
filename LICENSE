@@ -1,21 +1,36 @@
-MIT License
+Proprietary License
 
-Copyright (c) 2025 CodexJitin
+Copyright (c) 2025 CodexJitin. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software and associated documentation files (the "Software") are the 
+proprietary and confidential property of CodexJitin.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+RESTRICTIONS:
+1. You may NOT copy, modify, merge, publish, distribute, sublicense, or sell
+   copies of the Software without explicit written permission from CodexJitin.
 
+2. You may NOT reverse engineer, decompile, or disassemble the Software.
+
+3. You may NOT remove or alter any copyright, trademark, or other proprietary 
+   notices from the Software.
+
+4. You may only USE the Software as installed via official distribution 
+   channels (e.g., PyPI) for your own purposes.
+
+5. The source code, if accessible, is provided for reference only and may NOT 
+   be copied, modified, or redistributed.
+
+PERMITTED USE:
+- Installation and use via official package managers (pip install Codemni)
+- Integration into your own projects as a dependency
+- Use in commercial and non-commercial applications
+
+DISCLAIMER:
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For licensing inquiries or permission requests, contact: CodexJitin

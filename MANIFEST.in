@@ -2,8 +2,10 @@
 include README.md
 include LICENSE
 include requirements.txt
-recursive-include Codemni *.md
 recursive-include assets *.jpg *.png *.svg
+recursive-include llm *.md
+recursive-include memory *.md
+recursive-include TOOL_CALLING_AGENT *.md
 
 # Exclude unnecessary files
 global-exclude __pycache__
