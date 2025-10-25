@@ -27,18 +27,70 @@ Example usage:
 from typing import Optional, Any
 import os
 import time
+import warnings
+import sys
+from contextlib import contextmanager
+
+# Suppress gRPC ALTS warnings at environment level
+os.environ['GRPC_VERBOSITY'] = 'ERROR'
+os.environ['GLOG_minloglevel'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+# Suppress Python warnings from gRPC
+warnings.filterwarnings('ignore', category=UserWarning, module='.*grpc.*')
+
+@contextmanager
+def suppress_stderr():
+    """Temporarily suppress stderr output using low-level file descriptor redirection."""
+    import io
+    
+    # Save original stderr
+    original_stderr = sys.stderr
+    original_stderr_fd = None
+    
+    try:
+        # Save the original file descriptor
+        try:
+            original_stderr_fd = os.dup(2)
+        except:
+            pass
+        
+        # Redirect stderr to devnull
+        try:
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, 2)
+            os.close(devnull)
+        except:
+            pass
+        
+        # Also redirect Python's sys.stderr
+        sys.stderr = io.StringIO()
+        
+        yield
+        
+    finally:
+        # Restore stderr
+        try:
+            if original_stderr_fd is not None:
+                os.dup2(original_stderr_fd, 2)
+                os.close(original_stderr_fd)
+        except:
+            pass
+        
+        sys.stderr = original_stderr
 
 # Import the Google generativeai client at module level to reduce import overhead
 _GOOGLE_GENAI_AVAILABLE = False
 genai_module = None
 try:
-    try:
-        import google.generativeai as genai_module  # type: ignore
-        _GOOGLE_GENAI_AVAILABLE = True
-    except Exception:
-        # older or alternate packaging
-        from google import genai as genai_module  # type: ignore
-        _GOOGLE_GENAI_AVAILABLE = True
+    with suppress_stderr():
+        try:
+            import google.generativeai as genai_module  # type: ignore
+            _GOOGLE_GENAI_AVAILABLE = True
+        except Exception:
+            # older or alternate packaging
+            from google import genai as genai_module  # type: ignore
+            _GOOGLE_GENAI_AVAILABLE = True
 except Exception:
     _GOOGLE_GENAI_AVAILABLE = False
     genai_module = None
@@ -233,23 +285,25 @@ def google_llm(
     # client wrapper with .models.generate_content. Be tolerant and keep
     # the object shapes available for later.
     try:
-        # Prefer configure() if provided (no return value)
-        cfg = getattr(genai, "configure", None)
-        if callable(cfg):
-            cfg(api_key=api_key)
+        with suppress_stderr():
+            # Prefer configure() if provided (no return value)
+            cfg = getattr(genai, "configure", None)
+            if callable(cfg):
+                cfg(api_key=api_key)
     except Exception:
         # Non-fatal: some wrappers don't require configure
         pass
 
     # Instantiate client if a Client class exists
     try:
-        ClientCls = getattr(genai, "Client", None)
-        if callable(ClientCls):
-            try:
-                client = ClientCls(api_key=api_key)
-            except TypeError:
-                # Some Client constructors use different signatures
-                client = ClientCls()
+        with suppress_stderr():
+            ClientCls = getattr(genai, "Client", None)
+            if callable(ClientCls):
+                try:
+                    client = ClientCls(api_key=api_key)
+                except TypeError:
+                    # Some Client constructors use different signatures
+                    client = ClientCls()
     except Exception:
         # Non-fatal: client may not be needed
         pass
@@ -259,47 +313,48 @@ def google_llm(
     for attempt in range(1, max_retries + 1):
         try:
             # Try several calling patterns in order of preference
-
-            # 1) If the client has models.generate_content (client.models.generate_content)
-            if client is not None:
-                models_attr = getattr(client, "models", None)
-                gen_fn = getattr(models_attr, "generate_content", None) if models_attr else None
-                if callable(gen_fn):
-                    resp = gen_fn(model=model, contents=prompt, timeout=timeout)
-                    text = _extract_text_from_response(resp)
-                    if text:
-                        return text
-
-            # 2) If package exposes GenerativeModel and it has generate_content
-            GenerativeModel = getattr(genai, "GenerativeModel", None)
-            if callable(GenerativeModel):
-                try:
-                    # Create model with generation config if provided
-                    if generation_config:
-                        model_obj = GenerativeModel(model, generation_config=generation_config)
-                    else:
-                        model_obj = GenerativeModel(model)
-                    gen_fn = getattr(model_obj, "generate_content", None)
+            # Wrap API calls in stderr suppression to hide gRPC warnings
+            with suppress_stderr():
+                # 1) If the client has models.generate_content (client.models.generate_content)
+                if client is not None:
+                    models_attr = getattr(client, "models", None)
+                    gen_fn = getattr(models_attr, "generate_content", None) if models_attr else None
                     if callable(gen_fn):
-                        resp = gen_fn(prompt)  # GenerativeModel doesn't support timeout parameter
+                        resp = gen_fn(model=model, contents=prompt, timeout=timeout)
                         text = _extract_text_from_response(resp)
                         if text:
                             return text
-                except Exception:
-                    # Be tolerant: fall through to other options
-                    pass
 
-            # 3) Top-level convenience helpers (generate_text / generate)
-            for helper_name in ("generate_text", "generate", "model_generate"):
-                helper = getattr(genai, helper_name, None)
-                if callable(helper):
+                # 2) If package exposes GenerativeModel and it has generate_content
+                GenerativeModel = getattr(genai, "GenerativeModel", None)
+                if callable(GenerativeModel):
                     try:
-                        resp = helper(model=model, prompt=prompt, timeout=timeout)
-                        text = _extract_text_from_response(resp)
-                        if text:
-                            return text
+                        # Create model with generation config if provided
+                        if generation_config:
+                            model_obj = GenerativeModel(model, generation_config=generation_config)
+                        else:
+                            model_obj = GenerativeModel(model)
+                        gen_fn = getattr(model_obj, "generate_content", None)
+                        if callable(gen_fn):
+                            resp = gen_fn(prompt)  # GenerativeModel doesn't support timeout parameter
+                            text = _extract_text_from_response(resp)
+                            if text:
+                                return text
                     except Exception:
+                        # Be tolerant: fall through to other options
                         pass
+
+                # 3) Top-level convenience helpers (generate_text / generate)
+                for helper_name in ("generate_text", "generate", "model_generate"):
+                    helper = getattr(genai, helper_name, None)
+                    if callable(helper):
+                        try:
+                            resp = helper(model=model, prompt=prompt, timeout=timeout)
+                            text = _extract_text_from_response(resp)
+                            if text:
+                                return text
+                        except Exception:
+                            pass
 
             # If none of the above returned text, raise a response error to
             # trigger retry / final failure handling.

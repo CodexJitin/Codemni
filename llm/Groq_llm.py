@@ -25,10 +25,63 @@ Example usage:
 from typing import Optional, Any
 import os
 import time
+import warnings
+import sys
+from contextlib import contextmanager
+
+# Suppress gRPC and other warnings
+os.environ['GRPC_VERBOSITY'] = 'ERROR'
+os.environ['GLOG_minloglevel'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+# Suppress Python warnings
+warnings.filterwarnings('ignore', category=UserWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+@contextmanager
+def suppress_stderr():
+    """Temporarily suppress stderr output using low-level file descriptor redirection."""
+    import io
+    
+    # Save original stderr
+    original_stderr = sys.stderr
+    original_stderr_fd = None
+    
+    try:
+        # Save the original file descriptor
+        try:
+            original_stderr_fd = os.dup(2)
+        except:
+            pass
+        
+        # Redirect stderr to devnull
+        try:
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, 2)
+            os.close(devnull)
+        except:
+            pass
+        
+        # Also redirect Python's sys.stderr
+        sys.stderr = io.StringIO()
+        
+        yield
+        
+    finally:
+        # Restore stderr
+        try:
+            if original_stderr_fd is not None:
+                os.dup2(original_stderr_fd, 2)
+                os.close(original_stderr_fd)
+        except:
+            pass
+        
+        sys.stderr = original_stderr
 
 # Import the Groq client at module level to reduce import overhead
 try:
-    from groq import Groq
+    with suppress_stderr():
+        from groq import Groq
     _GROQ_AVAILABLE = True
 except ImportError:
     _GROQ_AVAILABLE = False

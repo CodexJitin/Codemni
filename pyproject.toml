@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Codemni"
-version = "1.1.1"
-description = "Production-Ready Python Toolkit for AI Development - LLM wrappers, AI agents, and conversation memory"
+version = "1.2.0"
+description = "Production-Ready Python Toolkit for AI Development - LLM wrappers, AI agents with reasoning capabilities, and conversation memory"
 readme = "README.md"
 authors = [
     {name = "CodexJitin"}
