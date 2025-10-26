@@ -4,17 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Codemni"
-version = "1.2.1"
-description = "Production-Ready Python Toolkit for AI Development - LLM wrappers, AI agents with reasoning capabilities, and conversation memory"
+version = "1.2.3"
+description = "Build Intelligent AI Agents with Full Control and Zero Complexity - Lightweight, modular Python toolkit for AI development"
 readme = "README.md"
 authors = [
     {name = "CodexJitin"}
 ]
-license = {text = "Proprietary"}
+license-files = ["LICENSE"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -37,18 +36,22 @@ google = ["google-generativeai>=0.3.0"]
 anthropic = ["anthropic>=0.25.0"]
 groq = ["groq>=0.4.0"]
 ollama = ["ollama>=0.1.0"]
+wikipedia = ["wikipedia>=1.4.0"]
 all = [
     "openai>=1.0.0",
     "google-generativeai>=0.3.0",
     "anthropic>=0.25.0",
     "groq>=0.4.0",
     "ollama>=0.1.0",
+    "wikipedia>=1.4.0",
 ]
 dev = [
     "pytest>=7.4.0",
     "black>=23.0.0",
     "flake8>=6.0.0",
     "mypy>=1.0.0",
+    "twine>=4.0.0",
+    "build>=1.0.0",
 ]
 
 [project.urls]
@@ -62,7 +65,7 @@ py-modules = []
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["llm", "memory", "TOOL_CALLING_AGENT", "core"]
+include = ["Agents*", "llm*", "memory*", "Prebuild_Tools*", "core*"]
 namespaces = false
 
 [tool.setuptools.package-data]

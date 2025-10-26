@@ -73,7 +73,7 @@ from .Ollama_llm import (
     OllamaLLMResponseError,
 )
 
-__version__ = "1.1.1"
+__version__ = "1.2.2"
 __author__ = "CodexJitin"
 __all__ = [
     # Google Gemini

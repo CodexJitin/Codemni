@@ -17,7 +17,7 @@ Example:
 For detailed documentation, see: https://github.com/CodexJitin/Codemni
 """
 
-__version__ = "1.1.1"
+__version__ = "1.2.3"
 __author__ = "CodexJitin"
 __license__ = "Proprietary"
 

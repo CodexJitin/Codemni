@@ -30,4 +30,4 @@ from .agent import Create_ToolCalling_Agent
 
 __all__ = ["Create_ToolCalling_Agent"]
 
-__version__ = "1.1.1"
+__version__ = "1.2.2"

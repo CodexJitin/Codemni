@@ -2,10 +2,14 @@
 include README.md
 include LICENSE
 include requirements.txt
-recursive-include assets *.jpg *.png *.svg
+recursive-include assets *.jpg *.png *.svg *.gif
+
+# Include documentation from all modules
 recursive-include llm *.md
 recursive-include memory *.md
-recursive-include TOOL_CALLING_AGENT *.md
+recursive-include Agents *.md
+recursive-include Prebuild_Tools *.md
+recursive-include core *.md
 
 # Exclude unnecessary files
 global-exclude __pycache__
@@ -13,5 +17,9 @@ global-exclude *.py[co]
 global-exclude .DS_Store
 global-exclude *.so
 global-exclude .git*
+global-exclude test.py
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
+recursive-exclude dist *
+recursive-exclude build *
+recursive-exclude *.egg-info *

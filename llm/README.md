@@ -1,95 +1,63 @@
-# Codemni LLM Module
+# LLM Module
 
-**Production-ready LLM wrappers with robust error handling, retries, and minimal dependencies.**
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.2.2-green.svg)](https://github.com/CodexJitin/Codemni)
+
+Production-ready LLM wrappers with robust error handling, retries, and minimal dependencies.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Supported Providers](#supported-providers)
+- [Two Ways to Use](#two-ways-to-use)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Exception Hierarchy](#exception-hierarchy)
+- [Environment Variables](#environment-variables)
+- [Best Practices](#best-practices)
+- [Author](#author)
+- [License](#license)
+- [Support](#support)
+
+## Overview
 
 A unified Python module that provides simple, consistent interfaces to multiple Large Language Model (LLM) providers. Each wrapper is designed for production use with built-in retry logic, timeout handling, and clear exception hierarchies.
 
-**NEW**: Now includes **class-based wrappers** alongside functions for stateful usage with agents!
+**Two Interfaces Available:**
+- **Function-based**: For one-off calls with all parameters
+- **Class-based**: For stateful usage with agents (NEW!)
+
+## Features
+
+- Automatic Retries: Built-in exponential backoff for transient failures
+- Timeout Support: Configurable request timeouts to prevent hanging
+- Robust Error Handling: Clear exception hierarchy for each provider
+- No Logging: Silent operation by design
+- Minimal Dependencies: Only install what you need
+- Consistent API: Same interface across all providers
+- Production-Ready: Input validation and defensive coding practices
+- Two Interfaces: Functions for one-off calls, Classes for stateful usage
 
 ## Installation
 
+### Prerequisites
+
+- Python 3.8 or higher
+
+### Install via PyPI
+
 ```bash
-# Install from PyPI
 pip install Codemni
-
-# Install with specific providers
-pip install Codemni[openai]
-pip install Codemni[google]
-pip install Codemni[anthropic]
-pip install Codemni[groq]
-pip install Codemni[ollama]
-
-# Install with all providers
-pip install Codemni[all]
 ```
 
-## ✨ Features
+> **Note:** Codemni is available exclusively through PyPI. For documentation and support, visit the [GitHub repository](https://github.com/CodexJitin/Codemni).
 
-- 🔄 **Automatic Retries**: Built-in exponential backoff for transient failures
-- ⚡ **Timeout Support**: Configurable request timeouts to prevent hanging
-- 🛡️ **Robust Error Handling**: Clear exception hierarchy for each provider
-- 🔇 **No Logging**: Silent operation by design (per project requirements)
-- 📦 **Minimal Dependencies**: Only install what you need
-- 🎯 **Consistent API**: Same function signature across all providers
-- 🧪 **Production-Ready**: Input validation and defensive coding practices
-- ⭐ **Two Interfaces**: Functions for one-off calls, Classes for stateful usage
+### Optional Dependencies
 
-## 🚀 Supported Providers
-
-| Provider | Function | Class | Models Supported |
-|----------|----------|-------|-----------------|
-| **Google Gemini** | `google_llm()` | `GoogleLLM` | gemini-pro, gemini-2.0-flash-exp, etc. |
-| **OpenAI** | `openai_llm()` | `OpenAILLM` | gpt-4, gpt-3.5-turbo, etc. |
-| **Anthropic Claude** | `anthropic_llm()` | `AnthropicLLM` | claude-3-opus, claude-3-sonnet, claude-3-haiku |
-| **Groq** | `groq_llm()` | `GroqLLM` | llama3-70b-8192, mixtral-8x7b-32768, etc. |
-| **Ollama** | `ollama_llm()` | `OllamaLLM` | llama2, mistral, codellama (local) |
-
-## 📚 Two Ways to Use
-
-### Option 1: Function-Based (Original)
-Perfect for one-off calls where you pass all parameters each time:
-
-```python
-from Codemni.llm import openai_llm
-
-response = openai_llm(
-    prompt="What is Python?",
-    model="gpt-4",
-    api_key="your-api-key"
-)
-```
-
-### Option 2: Class-Based (NEW!)
-Perfect for agents and repeated calls with the same configuration:
-
-```python
-from Codemni.llm import OpenAILLM
-
-llm = OpenAILLM(model="gpt-4", api_key="your-api-key")
-
-response1 = llm.generate_response("What is Python?")
-response2 = llm.generate_response("What is JavaScript?")
-```
-
-## 📦 Installation
-
-### Install from GitHub
-
-```bash
-# Clone the repository
-git clone https://github.com/CodexJitin/Codemni.git
-cd Codemni
-
-# Install the Codemni package
-pip install -e .
-```
-
-Or install directly from GitHub:
-```bash
-pip install git+https://github.com/CodexJitin/Codemni.git
-```
-
-### Install optional dependencies (based on your needs)
+Install provider-specific packages as needed:
 
 ```bash
 # For OpenAI
@@ -108,16 +76,48 @@ pip install google-generativeai>=0.3.0
 pip install ollama>=0.1.0
 ```
 
-Or install multiple at once:
-```bash
-pip install openai anthropic groq google-generativeai ollama
+## Supported Providers
+
+| Provider | Function | Class | Models Supported |
+|----------|----------|-------|-----------------|
+| **Google Gemini** | `google_llm()` | `GoogleLLM` | gemini-2.5-flash, gemini-2.0-flash, gemini-2.5-pro, gemini-2.0-flash-lite, gemini-2.5-flash-lite |
+| **OpenAI** | `openai_llm()` | `OpenAILLM` | gpt-4, gpt-3.5-turbo, o1, o3 |
+| **Anthropic Claude** | `anthropic_llm()` | `AnthropicLLM` | claude-3-opus, claude-3-sonnet, claude-3-haiku |
+| **Groq** | `groq_llm()` | `GroqLLM` | llama3-70b-8192, mixtral-8x7b-32768 |
+| **Ollama** | `ollama_llm()` | `OllamaLLM` | llama2, mistral, codellama (local) |
+
+## Two Ways to Use
+
+### Option 1: Function-Based
+
+Perfect for one-off calls where you pass all parameters each time:
+
+```python
+from Codemni.llm import openai_llm
+
+response = openai_llm(
+    prompt="What is Python?",
+    model="gpt-4",
+    api_key="your-api-key"
+)
 ```
 
-## 🎯 Quick Start
+### Option 2: Class-Based
+
+Perfect for agents and repeated calls with the same configuration:
+
+```python
+from Codemni.llm import OpenAILLM
+
+llm = OpenAILLM(model="gpt-4", api_key="your-api-key")
+
+response1 = llm.generate_response("What is Python?")
+response2 = llm.generate_response("What is JavaScript?")
+```
+
+## Quick Start
 
 ### Function-Based Examples
-
-Import using: `from Codemni.llm import ...`
 
 #### Google Gemini
 
@@ -153,7 +153,7 @@ except OpenAILLMError as e:
     print(f"Error: {e}")
 ```
 
-### Class-Based Examples (NEW!)
+### Class-Based Examples
 
 #### OpenAI Class
 
@@ -176,7 +176,7 @@ print(response)
 from Codemni.llm import GoogleLLM
 
 llm = GoogleLLM(
-    model="gemini-1.5-pro",
+    model="gemini-2.5-pro",
     api_key="your-api-key",  # or set GOOGLE_API_KEY env var
     temperature=0.9
 )
@@ -200,13 +200,43 @@ response = llm.generate_response("Explain quantum computing")
 print(response)
 ```
 
+#### Groq Class
+
+```python
+from Codemni.llm import GroqLLM
+
+llm = GroqLLM(
+    model="llama3-70b-8192",
+    api_key="your-api-key",  # or set GROQ_API_KEY env var
+    temperature=0.3
+)
+
+response = llm.generate_response("What is AI?")
+print(response)
+```
+
+#### Ollama Class
+
+```python
+from Codemni.llm import OllamaLLM
+
+llm = OllamaLLM(
+    model="llama2",
+    base_url="http://localhost:11434",  # or set OLLAMA_BASE_URL env var
+    temperature=0.8
+)
+
+response = llm.generate_response("Explain Docker")
+print(response)
+```
+
 #### Use with Agents
 
 Classes are perfect for use with agents that expect a `generate_response()` method:
 
 ```python
 from Codemni.llm import OpenAILLM
-from TOOL_CALLING_AGENT.agent import Create_ToolCalling_Agent
+from Codemni.Agents import Create_ToolCalling_Agent
 
 # Initialize LLM
 llm = OpenAILLM(model="gpt-4", api_key="your-key")
@@ -221,68 +251,16 @@ agent.add_tool("calculator", "Calculate expressions", lambda x: eval(x))
 result = agent.invoke("What is 100 + 200?")
 ```
 
-### Anthropic Claude (Function)
+## API Reference
 
-```python
-from codemni_LLM import anthropic_llm, AnthropicLLMError
-
-try:
-    response = anthropic_llm(
-        prompt="Explain machine learning in simple terms",
-        model="claude-3-sonnet-20240229",
-        api_key="your-api-key-here",  # or set ANTHROPIC_API_KEY env var
-        temperature=0.5,
-        max_tokens=150
-    )
-    print(response)
-except AnthropicLLMError as e:
-    print(f"Error: {e}")
-```
-
-### Groq
-
-```python
-from codemni_LLM import groq_llm, GroqLLMError
-
-try:
-    response = groq_llm(
-        prompt="What is artificial intelligence?",
-        model="llama3-70b-8192",
-        api_key="your-api-key-here",  # or set GROQ_API_KEY env var
-        temperature=0.3
-    )
-    print(response)
-except GroqLLMError as e:
-    print(f"Error: {e}")
-```
-
-### Ollama (Local)
-
-```python
-from codemni_LLM import ollama_llm, OllamaLLMError
-
-try:
-    response = ollama_llm(
-        prompt="Explain Docker in one sentence",
-        model="llama2",
-        base_url="http://localhost:11434",  # or set OLLAMA_BASE_URL env var
-        temperature=0.8
-    )
-    print(response)
-except OllamaLLMError as e:
-    print(f"Error: {e}")
-```
-
-## 🔧 API Reference
-
-All LLM functions share a similar signature:
+All LLM functions and classes share a similar signature.
 
 ### Common Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `prompt` | `str` | ✅ Yes | - | The input text/prompt to send to the model |
-| `model` | `str` | ✅ Yes | - | Model identifier (e.g., "gpt-4", "gemini-pro") |
+| `prompt` | `str` | Yes | - | The input text/prompt to send to the model |
+| `model` | `str` | Yes | - | Model identifier (e.g., "gpt-4", "gemini-pro") |
 | `api_key` | `str` | No | `None` | API key (falls back to environment variable) |
 | `max_retries` | `int` | No | `3` | Number of retry attempts on failures |
 | `timeout` | `float` | No | `30.0` | Request timeout in seconds (60s for Ollama) |
@@ -292,38 +270,37 @@ All LLM functions share a similar signature:
 
 ### Provider-Specific Notes
 
-#### Google Gemini
+**Google Gemini:**
 - Environment variable: `GOOGLE_API_KEY`
 - Robust response extraction handles different client versions
 - Supports safety settings and generation config
 
-#### OpenAI
+**OpenAI:**
 - Environment variable: `OPENAI_API_KEY`
 - Supports both chat models (gpt-4) and legacy completion models
 - Temperature range: 0.0-2.0
 
-#### Anthropic Claude
+**Anthropic Claude:**
 - Environment variable: `ANTHROPIC_API_KEY`
 - `max_tokens` parameter is required (default: 4096)
 - Temperature range: 0.0-1.0
 
-#### Groq
+**Groq:**
 - Environment variable: `GROQ_API_KEY`
 - Fast inference with open-source models
 - Temperature range: 0.0-2.0
 
-#### Ollama
+**Ollama:**
 - Environment variable: `OLLAMA_BASE_URL` (default: `http://localhost:11434`)
 - Requires Ollama server running locally
 - No API key required
 - Default timeout: 60 seconds
 
-## 🚨 Exception Hierarchy
+## Exception Hierarchy
 
 Each provider has its own exception hierarchy:
 
-```python
-# Base exception
+```
 {Provider}LLMError
     ├── {Provider}LLMImportError     # SDK not installed or import failed
     ├── {Provider}LLMAPIError         # API request failed after retries
@@ -331,12 +308,17 @@ Each provider has its own exception hierarchy:
 ```
 
 Example for Google:
-- `GoogleLLMError` (base)
-- `GoogleLLMImportError`
-- `GoogleLLMAPIError`
-- `GoogleLLMResponseError`
 
-## 🔐 Environment Variables
+```python
+from Codemni.llm import (
+    GoogleLLMError,
+    GoogleLLMImportError,
+    GoogleLLMAPIError,
+    GoogleLLMResponseError
+)
+```
+
+## Environment Variables
 
 Set these environment variables to avoid passing API keys in code:
 
@@ -359,69 +341,85 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Now environment variables are loaded
-from codemni_LLM import google_llm
+from Codemni.llm import google_llm
 response = google_llm(prompt="Hello", model="gemini-pro")
 ```
 
-## 📝 Examples
+## Best Practices
 
-See `examples.py` for complete working examples of all providers.
+### 1. Choose the Right Interface
 
-Run examples:
-```bash
-cd Codemni
-python -m llm.examples
+- **Function-based**: One-off calls, quick scripts
+- **Class-based**: Agents, repeated calls, stateful usage
+
+### 2. Handle Exceptions Properly
+
+```python
+from Codemni.llm import openai_llm, OpenAILLMError
+
+try:
+    response = openai_llm(prompt="Hello", model="gpt-4", api_key="key")
+except OpenAILLMError as e:
+    print(f"Error occurred: {e}")
 ```
 
-## 🏗️ Project Structure
+### 3. Use Environment Variables
 
-```
-Codemni/llm/
-├── __init__.py           # Package initialization and exports
-├── Google_llm.py         # Google Gemini wrapper
-├── OpenAI_llm.py         # OpenAI GPT wrapper
-├── Anthropic_llm.py      # Anthropic Claude wrapper
-├── Groq_llm.py           # Groq wrapper
-├── Ollama_llm.py         # Ollama local wrapper
-├── examples.py           # Usage examples for all providers
-└── README.md             # This file
+Store API keys in environment variables, not in code:
+
+```python
+# Good
+llm = OpenAILLM(model="gpt-4")  # Uses OPENAI_API_KEY env var
+
+# Avoid
+llm = OpenAILLM(model="gpt-4", api_key="sk-...")  # Hardcoded
 ```
 
-## 🧪 Testing
+### 4. Configure Retries and Timeouts
 
-Each function includes comprehensive input validation:
-- ✅ Non-empty string validation for prompts and models
-- ✅ Numeric range validation for temperatures and tokens
-- ✅ API key presence validation
-- ✅ Retry count validation
+Adjust for your use case:
 
-## 🤝 Contributing
+```python
+llm = OpenAILLM(
+    model="gpt-4",
+    max_retries=5,
+    timeout=60.0,
+    backoff_factor=1.0
+)
+```
 
-This package follows these design principles:
-1. **No logging**: Silent operation by design
-2. **Fail fast**: Clear exceptions with meaningful messages
-3. **Defensive coding**: Validate all inputs
-4. **Production-ready**: Retries, timeouts, and error handling
-5. **Consistent API**: Same interface across all providers
+### 5. Minimal Dependencies
 
-## 📄 License
+Only install the providers you need to keep your environment lean.
 
-See the main project LICENSE file for details.
-
-## 👤 Author
+## Author
 
 **CodexJitin**
 
-## 📦 Repository
+- GitHub: [@CodexJitin](https://github.com/CodexJitin)
+- LinkedIn: [linkedin.com/in/codexjitin](https://www.linkedin.com/in/codexjitin)
+- Email: codexjitin@gmail.com
 
-**GitHub**: [CodexJitin/Codemni](https://github.com/CodexJitin/Codemni)
+### About the Developer
 
-This LLM module is part of the Codemni repository and is located in the `llm` subdirectory.
+Passionate about building production-ready AI tools and frameworks. Creator of Codemni, a comprehensive toolkit for developing AI agents with advanced reasoning capabilities.
 
-## 🔖 Version
+## License
 
-**v1.0.0**
+This project is licensed under a **Proprietary License**. See the [LICENSE](../../LICENSE) file for details.
 
----
+© 2025 CodexJitin. All rights reserved.
 
-**Note**: This package is designed for production use with minimal dependencies. Only install the provider SDKs you actually need to keep your environment lean.
+## Acknowledgments
+
+- Built with support from the open-source AI community
+- Designed for seamless integration with multiple LLM providers
+- Optimized for production use with robust error handling
+
+## Support
+
+- **Documentation**: [GitHub Repository](https://github.com/CodexJitin/Codemni)
+- **Issues**: [GitHub Issues](https://github.com/CodexJitin/Codemni/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/CodexJitin/Codemni/discussions)
+
+**Part of the Codemni AI Agent Framework** | Built by [CodexJitin](https://github.com/CodexJitin)

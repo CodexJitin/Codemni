@@ -1,8 +1,28 @@
 # 🤖 Reasoning Tool Calling Agent
 
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.2.2-green.svg)](https://github.com/CodexJitin/Codemni)
+
 A fast and efficient AI agent with basic reasoning capabilities and tool execution. Perfect for production environments where speed and cost-efficiency are priorities.
 
-## 📋 Overview
+## Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Comparison](#comparison-reasoning-vs-deep-reasoning-agent)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage Examples](#usage-examples)
+- [Configuration](#configuration-options)
+- [Best Practices](#best-practices)
+- [Performance Metrics](#performance-metrics)
+- [When to Choose This Agent](#when-to-choose-this-agent)
+- [Troubleshooting](#troubleshooting)
+- [Author](#author)
+- [License](#license)
+
+## Overview
 
 The `Create_ToolCalling_Agent` provides a balanced approach to AI tool calling with:
 
@@ -12,59 +32,79 @@ The `Create_ToolCalling_Agent` provides a balanced approach to AI tool calling w
 - **Simple Structure**: Easy to understand and maintain
 - **Production-Ready**: Reliable for high-volume applications
 
-**⚡ Performance Note:** This agent averages 4.63s per query compared to 11.11s for the deep reasoning agent, making it ideal for production APIs and real-time applications.
+**Performance Note:** This agent averages 4.63s per query compared to 11.11s for the deep reasoning agent, making it ideal for production APIs and real-time applications.
 
-## ✨ Key Features
+## Key Features
 
 ### 1. **Basic Thinking Display**
+
 - Shows thought process before action
 - Simple, clear reasoning
 - Sufficient for most tasks
 - Low overhead
 
 ### 2. **Tool Call Decision**
+
 - Identifies which tool to use
 - Determines appropriate parameters
 - Executes tool calls efficiently
 
 ### 3. **Memory Integration**
+
 - Optional conversation history
 - Maintains context across interactions
 - Works with all memory types
 
 ### 4. **Custom Prompts**
+
 - Flexible agent personality
 - Role-specific behavior
 - Easy customization
 
 ### 5. **Verbose Mode Control**
+
 - Silent mode for production
 - Debug mode for development
 - Fine-grained logging control
 
-## 🆚 Comparison: Reasoning vs Deep Reasoning Agent
+## Comparison: Reasoning vs Deep Reasoning Agent
 
-| Feature | REASONING Agent ✅ | DEEP_REASONING Agent |
-|---------|-------------------|----------------------|
-| **Speed** | ⚡ Fast (4.63s avg) | 🐢 Slower (11.11s avg) |
-| **Token Usage** | 💰 Low (600-900) | 💸 High (1500-2800) |
-| **Thinking Display** | ✅ Basic | ✅ Deep chain-of-thought |
-| **Problem Analysis** | ⚠️ Minimal | ✅ Comprehensive breakdown |
-| **Situation Awareness** | ❌ None | ✅ Dynamic context tracking |
-| **Reasoning Depth** | ⚠️ Surface-level | ✅ Multi-layered reasoning |
-| **Self-Reflection** | ❌ None | ✅ Confidence + alternatives |
-| **Error Recovery** | ⚠️ Basic retry | ✅ Strategic alternatives |
-| **Best For** | Production APIs ✅ | Research & Debugging |
-| **Cost** | 💰 Low | 💸 High |
-| **Complexity** | 🟢 Simple | 🟡 Complex |
+| Feature | REASONING Agent | DEEP_REASONING Agent |
+|---------|-----------------|----------------------|
+| **Speed** | Fast (4.63s avg) | Slower (11.11s avg) |
+| **Token Usage** | Low (600-900) | High (1500-2800) |
+| **Thinking Display** | Basic | Deep chain-of-thought |
+| **Problem Analysis** | Minimal | Comprehensive breakdown |
+| **Situation Awareness** | None | Dynamic context tracking |
+| **Reasoning Depth** | Surface-level | Multi-layered reasoning |
+| **Self-Reflection** | None | Confidence + alternatives |
+| **Error Recovery** | Basic retry | Strategic alternatives |
+| **Best For** | Production APIs | Research & Debugging |
+| **Cost** | Low | High |
+| **Complexity** | Simple | Complex |
 
-## 📖 Usage
+## Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- An LLM API key (Google Gemini, OpenAI, Anthropic, etc.)
+
+### Install via PyPI
+
+```bash
+pip install Codemni
+```
+
+> **Note:** Codemni is available exclusively through PyPI. For documentation and support, visit the [GitHub repository](https://github.com/CodexJitin/Codemni).
+
+## Quick Start
 
 ### Basic Setup
 
 ```python
-from REASONING_TOOL_CALLING_AGENT.agent import Create_ToolCalling_Agent
-from llm.Google_llm import GoogleLLM
+from Codemni.Agents import Create_ToolCalling_Agent
+from Codemni.llm import GoogleLLM
 
 # Initialize LLM
 llm = GoogleLLM(
@@ -75,18 +115,18 @@ llm = GoogleLLM(
 # Create reasoning agent
 agent = Create_ToolCalling_Agent(
     llm=llm,
-    verbose=True  # Enable verbose output
+    verbose=True
 )
 
 # Add tools
-def calculator(expression):
+def calculator(expression: str) -> str:
     """Evaluate mathematical expressions"""
     return str(eval(expression))
 
 agent.add_tool(
-    "calculator",
-    "Evaluate mathematical expressions",
-    calculator
+    name="calculator",
+    description="Evaluate mathematical expressions",
+    function=calculator
 )
 
 # Use the agent
@@ -94,10 +134,12 @@ response = agent.invoke("What is 144 divided by 12?")
 print(response)
 ```
 
-### With Memory
+## Usage Examples
+
+### Example 1: With Memory
 
 ```python
-from memory import ConversationalWindowMemory
+from Codemni.memory import ConversationalWindowMemory
 
 # Create memory instance
 memory = ConversationalWindowMemory(window_size=10)
@@ -114,7 +156,7 @@ agent.invoke("Calculate 50 + 30")
 agent.invoke("Multiply the previous result by 2")  # Remembers context
 ```
 
-### With Custom Prompt
+### Example 2: With Custom Prompt
 
 ```python
 # Define agent personality/role
@@ -122,27 +164,27 @@ custom_intro = "You are a friendly math tutor who loves helping students."
 
 agent = Create_ToolCalling_Agent(
     llm=llm,
-    prompt=custom_intro,  # Custom agent personality
+    prompt=custom_intro,
     verbose=True
 )
 
 # Agent behavior reflects the custom prompt
 ```
 
-### Silent Mode (Production)
+### Example 3: Silent Mode (Production)
 
 ```python
 # For production - no logging
 agent = Create_ToolCalling_Agent(
     llm=llm,
-    verbose=False  # Silent mode
+    verbose=False
 )
 
 response = agent.invoke("Calculate something")
 # Only returns final response, no intermediate logs
 ```
 
-## 🔧 Configuration Options
+## Configuration Options
 
 ```python
 Create_ToolCalling_Agent(
@@ -157,27 +199,24 @@ Create_ToolCalling_Agent(
 
 - **`llm`** (required): LLM instance with `generate_response()` method
   - Supported: Google, OpenAI, Anthropic, Groq, Ollama
-  
 - **`verbose`** (bool): Control output verbosity
   - `True`: Show thinking, tool calls, and results
   - `False`: Only return final response (production mode)
-  
 - **`prompt`** (str, optional): Custom agent personality
   - Should ONLY contain agent role/personality description
   - Tool instructions are added automatically
   - Example: "You are a financial advisor"
-  
 - **`memory`** (object, optional): Memory for conversation history
   - `ConversationalBufferMemory`: Stores all history
   - `ConversationalWindowMemory`: Stores last N messages
   - `ConversationalSummaryMemory`: Stores summarized history
   - `ConversationalTokenBufferMemory`: Token-limited history
 
-## 📊 Response Structure
+## Response Structure
 
 ### With verbose=True
 
-```
+```text
 🤔 Thinking:
   Need to divide 144 by 12 using the calculator tool
 
@@ -191,13 +230,13 @@ Create_ToolCalling_Agent(
 
 ### With verbose=False
 
-```
+```text
 144 divided by 12 equals 12.0
 ```
 
-## 🎯 Best Use Cases
+## Best Use Cases
 
-### ✅ Ideal For
+### Ideal For
 
 - **Production APIs**: Fast response times critical
 - **High-Volume Applications**: Cost-sensitive operations
@@ -207,7 +246,7 @@ Create_ToolCalling_Agent(
 - **Simple Queries**: Straightforward tool calls
 - **Cost Optimization**: Token usage matters
 
-### ⚠️ Not Ideal For
+### Not Ideal For
 
 - **Complex Multi-Step Reasoning**: Use Deep Reasoning agent
 - **Educational/Debugging**: Limited reasoning visibility
@@ -215,7 +254,7 @@ Create_ToolCalling_Agent(
 - **Research Applications**: Minimal transparency
 - **Error Recovery**: Basic retry logic only
 
-## 🚀 Advanced Features
+## Advanced Features
 
 ### Adding Multiple Tools
 
@@ -259,7 +298,7 @@ memory = ConversationalBufferMemory()
 agent.add_memory(memory)
 ```
 
-## 📝 Example Queries
+## Example Queries
 
 ### Simple Calculation
 
@@ -285,7 +324,7 @@ response = agent.invoke(
 # Uses: string_length tool → calculator tool
 ```
 
-## ⚡ Performance Metrics
+## Performance Metrics
 
 Based on comprehensive testing:
 
@@ -297,29 +336,29 @@ Based on comprehensive testing:
 | **Speed vs Deep** | 2.4x faster | Significant advantage |
 | **Cost vs Deep** | 50-70% cheaper | Token savings |
 
-## 🎓 When to Choose This Agent
+## When to Choose This Agent
 
 ### Choose REASONING_TOOL_CALLING_AGENT When
 
-✅ Speed is important (production APIs)  
-✅ Cost optimization matters (high volume)  
-✅ Simple to moderate complexity queries  
-✅ Real-time responses needed  
-✅ Basic reasoning transparency sufficient  
-✅ Straightforward tool calling  
-✅ Production deployment  
+- Speed is important (production APIs)
+- Cost optimization matters (high volume)
+- Simple to moderate complexity queries
+- Real-time responses needed
+- Basic reasoning transparency sufficient
+- Straightforward tool calling
+- Production deployment
 
 ### Choose DEEP_REASONING_TOOL_CALLING_AGENT When
 
-❌ Complex multi-step reasoning required  
-❌ Need deep transparency into thinking  
-❌ Educational or debugging purposes  
-❌ High-stakes decision making  
-❌ Research and analysis  
-❌ Error recovery critical  
-❌ Confidence scoring needed  
+- Complex multi-step reasoning required
+- Need deep transparency into thinking
+- Educational or debugging purposes
+- High-stakes decision making
+- Research and analysis
+- Error recovery critical
+- Confidence scoring needed
 
-## 🔍 JSON Response Format
+## JSON Response Format
 
 The agent expects this JSON structure from the LLM:
 
@@ -346,9 +385,10 @@ When no tool is needed:
 }
 ```
 
-## 💡 Tips and Best Practices
+## Best Practices
 
 ### 1. **Use verbose=False in Production**
+
 ```python
 # Development
 dev_agent = Create_ToolCalling_Agent(llm=llm, verbose=True)
@@ -358,6 +398,7 @@ prod_agent = Create_ToolCalling_Agent(llm=llm, verbose=False)
 ```
 
 ### 2. **Keep Tool Descriptions Clear**
+
 ```python
 # Good
 agent.add_tool("calc", "Evaluate math expressions like '2+2' or '10*5'", calculator)
@@ -367,12 +408,14 @@ agent.add_tool("calc", "Do math", calculator)
 ```
 
 ### 3. **Use Memory for Multi-Turn Conversations**
+
 ```python
 memory = ConversationalWindowMemory(window_size=10)
 agent = Create_ToolCalling_Agent(llm=llm, memory=memory)
 ```
 
 ### 4. **Custom Prompts for Specific Domains**
+
 ```python
 # For financial advisor
 prompt = "You are a professional financial advisor with expertise in investments."
@@ -380,11 +423,12 @@ agent = Create_ToolCalling_Agent(llm=llm, prompt=prompt)
 ```
 
 ### 5. **Tool Naming Conventions**
+
 - Use lowercase with underscores: `get_weather`, `calculate_tax`
 - Be descriptive: `convert_currency` not `conv`
 - Avoid special characters
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: Agent not using tools
 
@@ -422,26 +466,47 @@ prompt = "You are a friendly assistant"
 prompt = "You are an assistant. Use tools by returning JSON..."
 ```
 
-## 📚 Related
-
-- **DEEP_REASONING_TOOL_CALLING_AGENT**: For complex reasoning needs
-- **TOOL_CALLING_AGENT**: Basic tool calling without reasoning
-- **Memory Modules**: `memory/` folder for conversation history
-- **LLM Wrappers**: `llm/` folder for different LLM providers
-
-## 🏆 Summary
+## Summary
 
 **REASONING_TOOL_CALLING_AGENT** is the **recommended choice** for:
 
-- ✅ Production applications
-- ✅ Cost-sensitive deployments  
-- ✅ High-volume requests
-- ✅ Real-time systems
-- ✅ Simple to moderate complexity
-- ✅ When basic reasoning is sufficient
+- Production applications
+- Cost-sensitive deployments
+- High-volume requests
+- Real-time systems
+- Simple to moderate complexity
+- When basic reasoning is sufficient
 
 **Performance**: Fast, reliable, and cost-efficient while maintaining reasoning transparency.
 
----
+## Author
 
-**Note**: For queries requiring deep reasoning, problem analysis, confidence scoring, and error recovery strategies, consider using `DEEP_REASONING_TOOL_CALLING_AGENT` instead.
+**CodexJitin**
+
+- GitHub: [@CodexJitin](https://github.com/CodexJitin)
+- LinkedIn: [linkedin.com/in/codexjitin](https://www.linkedin.com/in/codexjitin)
+- Email: codexjitin@gmail.com
+
+### About the Developer
+
+Passionate about building production-ready AI tools and frameworks. Creator of Codemni, a comprehensive toolkit for developing AI agents with advanced reasoning capabilities.
+
+## License
+
+This project is licensed under a **Proprietary License**. See the [LICENSE](../../../LICENSE) file for details.
+
+© 2025 CodexJitin. All rights reserved.
+
+## Acknowledgments
+
+- Built with support from the open-source AI community
+- Powered by state-of-the-art LLM providers (Google, OpenAI, Anthropic, Groq)
+- Inspired by advanced reasoning frameworks and chain-of-thought prompting research
+
+## Support
+
+- **Documentation**: [GitHub Repository](https://github.com/CodexJitin/Codemni)
+- **Issues**: [GitHub Issues](https://github.com/CodexJitin/Codemni/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/CodexJitin/Codemni/discussions)
+
+**Part of the Codemni AI Agent Framework** | Built by [CodexJitin](https://github.com/CodexJitin)
